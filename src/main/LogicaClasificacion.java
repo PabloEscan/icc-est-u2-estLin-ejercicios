@@ -3,7 +3,15 @@ package main;
 import java.util.*;
 
 public class LogicaClasificacion {
+    private Stack<Character> caracteres;
+    private Stack<Character> simbolos;
+    private Stack<Integer> auxliliar;
 
+    public LogicaClasificacion() {
+        this.caracteres = new Stack<>(); 
+        this.simbolos = new Stack<>();
+        this.auxliliar = new Stack<>();
+    }
     /**
      * Invierte una cadena de texto utilizando una pila (Stack).
      *
@@ -14,8 +22,20 @@ public class LogicaClasificacion {
      *         Entrada: "Hola Mundo"
      *         Salida: "odnuM aloH"
      */
+
+
     public String invertirCadena(String texto) {
-        return "";
+
+        int tam = texto.length();
+        for(int i=0; i<tam; i++){
+            caracteres.push(texto.charAt(i));
+        }
+
+        String invertida = "";
+        while(!caracteres.isEmpty()) {
+            invertida += caracteres.pop();
+        }
+        return invertida;
     }
 
     /**
@@ -30,7 +50,30 @@ public class LogicaClasificacion {
      *         Salida: true
      */
     public boolean validarSimbolos(String expresion) {
-        return false;
+        int tam = expresion.length();
+        for(int i = 0; i<tam; i++){
+            char c = expresion.charAt(i);
+
+            if(c == '(' || c =='[' || c == '{'){
+                simbolos.push(c);
+
+            }else if (c == ')' || c ==']' || c == '}'){
+                if(simbolos.isEmpty()){
+                    return false;
+                }
+
+                char top = simbolos.pop();
+                if(c== ')' && top != '('||c== ']' && top != '['||c== '}' && top != '{'){
+                    return false;
+                }
+
+
+            }else{
+                return false;
+            }
+        }
+
+        return simbolos.isEmpty();
     }
 
     /**
@@ -43,8 +86,22 @@ public class LogicaClasificacion {
      *         Salida: [1, 2, 3, 4]
      */
     public List<Integer> ordenarPila(Stack<Integer> pila) {
+        while(!pila.isEmpty()){
+            int num = pila.pop();
 
-        return new ArrayList<>();
+            while(!auxliliar.isEmpty() && auxliliar.peek()<num){
+                pila.push(auxliliar.pop());
+            }
+
+            auxliliar.push(num);    
+        }
+
+        List<Integer> resultado = new ArrayList<>();
+        while(!auxliliar.isEmpty()){
+            resultado.add(auxliliar.pop());
+        }
+
+        return resultado;
     }
 
     /**
@@ -58,7 +115,20 @@ public class LogicaClasificacion {
      *         Salida: [2, 4, 6, 1, 3, 5]
      */
     public List<Integer> clasificarPorParidad(LinkedList<Integer> original) {
+        List<Integer> listaPares = new LinkedList<>();
+        List<Integer> listaImpares = new LinkedList<>();
 
-        return new ArrayList<>();
+
+        for(int num : original){
+            if(num %2 == 0){
+                listaPares.add(num);
+            }else{
+                listaImpares.add(num);
+            }
+        }
+
+        listaPares.addAll(listaImpares);
+
+        return listaPares;
     }
 }
